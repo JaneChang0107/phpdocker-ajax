@@ -25,7 +25,10 @@
             <h3>Add user</h3>
             <hr/>
             Name: <input type="text" name="Name" class="form-control"/>
-            Surname: <input type="text" name="Surname" class="form-control"/>
+            Gender: 
+            <input type="radio" name="Surname" value="boy"/>boy
+            <input type="radio" name="Surname" value="girl">girl
+            <br/>
             Email: <input type="text" name="email" class="form-control"/>
             phone: <input type="text" name="phone" class="form-control"/>
             <input type="submit" value="Send" class="btn btn-success"/>
@@ -38,6 +41,7 @@
             <?php foreach($datos["employees"] as $employee) {?>
                 <?php echo $employee["id"]; ?> -
                 <?php echo $employee["Name"]; ?> -
+                <?php echo $employee["Surname"]; ?> -
                 <?php echo $employee["email"]; ?> -
                 <?php echo $employee["phone"]; ?>
                 <div class="right">
