@@ -27,7 +27,10 @@
                 <hr/>
                 <input type="hidden" name="id" id="id" value="<?php echo $datos["employee"]->id ?>"/>
                 Name: <input type="text" name="Name" id="Name" value="<?php echo $datos["employee"]->Name ?>" class="form-control"/>
-                Surname: <input type="text" name="Surname" id="Surname" value="<?php echo $datos['employee']->Surname ?>" class="form-control"/>
+                Gender:
+                <input type="radio" name="Surname" id="Surname" <?php echo ($datos["employee"]->Surname =='boy')? 'checked':'' ?> value="boy"/> boy
+                <input type="radio" name="Surname" id="Surname" <?php echo ($datos["employee"]->Surname =='girl')? 'checked':'' ?> value="girl"/> girl
+                <br/>
                 Email: <input type="text" name="email" id="email" value="<?php echo $datos['employee']->email ?>" class="form-control"/>
                 phone: <input type="text" name="phone"  id="phone" value="<?php echo$datos['employee']->phone ?>" class="form-control"/>
                 <input type="submit" value="Send" id="send" class="btn btn-success"/>
@@ -60,11 +63,10 @@
 
     $(document).ready(function(){
 //transform form content to json object
+ //       var gender = $("input[name='Surname']").val();
+//        $("input[name=Surname][value=" + gender + "]").prop('checked', true);
         var form = $("#contact-form");
-        
         var before = convertFormToJSON(form);
-        //console.log(before);
-
         function convertFormToJSON(form) {
             var array = $(form).serializeArray(); // Encodes the set of form elements as an array of names and values.
             console.log(array);
@@ -104,7 +106,12 @@
             for (const key in obj) {
                 if (obj.hasOwnProperty(key)) {
                     console.log(`${key}: ${obj[key]}`);
-                    $("#"+key).val(obj[key]);
+                    if($(`input[name=`+key+`]`).attr('type') == 'radio'){
+                        $("input[name="+key+"][value=" + obj[key] + "]").prop('checked', true);
+                    }else{
+                        $(`input[name=`+key+`]`).val(obj[key]);
+                    }
+
                 }              
             }            
         });
