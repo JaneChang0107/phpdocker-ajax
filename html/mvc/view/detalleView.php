@@ -79,7 +79,7 @@
                 $dbDataArr[] = $value;
             };
 			for($i=0;$i<count($v_array);$i++){                             
-                echo "<input type=checkbox id=checkbox1 name=phone[]  value='".$v_array[$i]."'";
+                echo "<input type='checkbox' id='checkbox1' name='phone[]'  value='".$v_array[$i]."'";
 
                 for($j=0;$j<count($dbDataArr);$j++){
                     if($dbDataArr[$j] == $v_array[$i]){ 
@@ -116,11 +116,11 @@
             var test = "";
 
             for(var i = 0 ; i<array.length;i++){
-                if(array[i].name=='phone[]'){
+                if(array[i].name=='phone[]'){ //暫時寫死的
                     test+=","+array[i].value;
                 };
                 //console.log(array[i].name);
-                if(array[i].name=='phone[]'){
+                if(array[i].name=='phone[]'){ //暫時寫死的
                     json[array[i].name] = test.substring(1); 
                 }else{
                     json[array[i].name] = array[i].value ;  
@@ -146,7 +146,6 @@
                 setWithExpiry('testObject', after, 5000)
             }
         };
-
         //create object with expiry function
         function setWithExpiry(key, value, ttl) {
             const now = new Date()
@@ -168,28 +167,36 @@
         $("#retrieve").click(function() {
             var dataFromLocalstorage = localStorage.getItem('testObject');
             var obj = JSON.parse(dataFromLocalstorage);
-            
-            for (const key in obj) {   
-                if (obj.hasOwnProperty(key)) {                   
-                    // console.log(`${key}: ${obj[key]}`);
-                    //set retrieved velue to form
-                    if ($(`input[name=` + key + `]`).attr('type') == 'radio') {
-                        $("input[name=" + key + "][value=" + obj[key] + "]").prop('checked', true);
-                    } 
-                    else if($(`select[name=` + key + `]`)){
-                        $(`select[name=` + key + `]`).val(obj[key]);
+            //console.log(obj);
+            for (const key in obj) {  
+                console.log(key); 
+                if (obj.hasOwnProperty(key)) {
+                    //console.log("RARARARARA");
+                    var str = $("input[name=\""  + key + "\"]"); 
+
+                    if($("select[name=\"" + key + "\"]")){
+                        $("select[name=\"" + key + "\"]").val(obj[key]);
                     }
-                    else if($(`input[name=` + key + `[]]`).attr('type') == 'checkbox'){
-                        var testobj =  obj[key]; 
-                        var arraytest =testobj.split(','); 
-                        for(var i=0; i< arraytest.length;i++){
-                            $("input[name=" + key + "[]][value=" + arraytest[i] + "]").prop('checked', true);
-                        }
-                    }
-                          // $("input[name=" + key + "[]][value=" + obj[key] + "]").prop('checked', true);
-                    else {
+
+                    if ($(str).attr('type')== 'radio') {
+                        //console.log("HEREISME");
+                        $("input[name=\"" + key + "\"][value=\"" + obj[key] + "\"]").prop('checked', true);
+                    } else if($(str).attr('type')=='checkbox'){
+                        console.log("HEREISMEHAHAH");
+                            var testobj =  obj[key]; 
+                            var arraytest =testobj.split(','); 
+                            console.log("in2");  
+                            for(var i=0; i< arraytest.length;i++){
+                                console.log(arraytest[i]);
+                                    $("input[name=\"" + key + "\"][value=" + arraytest[i] + "]").prop('checked', true);
+                            }
+                    }else{
                         $(`input[name=` + key + `]`).val(obj[key]);
-                    }
+                    };  
+                }else{
+                    concole.log("沒東西ㄌ");
+                    $("input[name=\"" + key + "\"][value='']").prop('checked', false);
+
                 }
             }
         });
