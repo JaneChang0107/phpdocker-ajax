@@ -165,6 +165,9 @@
 
         //click retrieve button to get data at local storage
         $("#retrieve").click(function() {
+            
+            $("#contact-form").find("textarea, :text, select").val("").end().find(":checked").prop("checked", false);
+            
             var dataFromLocalstorage = localStorage.getItem('testObject');
             var obj = JSON.parse(dataFromLocalstorage);
             //console.log(obj);
