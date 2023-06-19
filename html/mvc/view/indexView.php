@@ -29,8 +29,45 @@
             <input type="radio" name="Surname" value="boy"/>boy
             <input type="radio" name="Surname" value="girl">girl
             <br/>
-            Email: <input type="text" name="email" class="form-control"/>
-            phone: <input type="text" name="phone" class="form-control"/>
+            <!-- Email: <input type="text" name="email" class="form-control"/> -->
+            <!--email : drop down-->
+            Email: 
+            <?php
+                $k_array = array(
+                    '@gmail.com',
+                    '@outlook.com',
+                    '@yahoo.com',
+                    'その他'
+                );
+            ?>
+            <select name="email">
+                <option value=""></option>
+            <?php
+                foreach ( $k_array as $value ) {
+                    if ( ! empty( $clean['k'] ) ) {
+                        if ( $value === $clean['k'] ) {
+                            echo '<option value="' . $value . '" selected>' . $value . '</option>';
+                        } else {
+                            echo '<option value="' . $value . '">' . $value . '</option>';
+                        }
+                    } else {
+                        echo '<option value="' . $value . '">' . $value . '</option>';
+                    }
+                }   
+            ?>
+            </select>
+            <br  />
+            <!-- phone: <input type="text" name="phone" class="form-control"/> -->
+            phone:
+            <input type="checkbox" id="checkbox1" name="phone[]" value="Line">   
+            <label for="checkbox1">Line</label> 
+            <input type="checkbox" id="checkbox2" name="phone[]" value="Messenger">       
+            <label for="checkbox2">Messenger</label> 
+            <input type="checkbox" id="checkbox3" name="phone[]" value="GoogleChat">    
+            <label for="checkbox3">Google Chat</label> 
+            <input type="checkbox" id="checkbox4" name="phone[]" value="etc">     
+            <label for="checkbox4">etc</label>            
+            <br />
             <input type="submit" value="Send" class="btn btn-success"/>
         </form>
         <div class="col-lg-7">
@@ -43,7 +80,7 @@
                 <?php echo $employee["Name"]; ?> -
                 <?php echo $employee["Surname"]; ?> -
                 <?php echo $employee["email"]; ?> -
-                <?php echo $employee["phone"]; ?>
+                <?php echo $employee['phone']; ?>
                 <div class="right">
                     <a href="index.php?controller=employees&action=detalle&id=<?php echo $employee['id']; ?>" class="btn btn-info">Detalles</a>
                 </div>

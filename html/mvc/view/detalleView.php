@@ -25,18 +25,80 @@
         <form action="index.php?controller=employees&action=actualizar" method="post" id="contact-form">
             <h3>User detail</h3>
             <hr />
+            <!--id: hidden-->
             <input type="hidden" name="id" id="id" value="<?php echo $datos["employee"]->id ?>" />
+            <!--name: text-->
             Name: <input type="text" name="Name" id="Name" value="<?php echo $datos["employee"]->Name ?>" class="form-control" />
+            <!--gender: radio button-->
             Gender:
             <input type="radio" name="Surname" id="Surname" <?php echo ($datos["employee"]->Surname == 'boy') ? 'checked' : '' ?> value="boy" /> boy
             <input type="radio" name="Surname" id="Surname" <?php echo ($datos["employee"]->Surname == 'girl') ? 'checked' : '' ?> value="girl" /> girl
             <br />
-            Email: <input type="text" name="email" id="email" value="<?php echo $datos['employee']->email ?>" class="form-control" />
-            phone: <input type="text" name="phone" id="phone" value="<?php echo $datos['employee']->phone ?>" class="form-control" />
+            <!--email : drop down-->
+            Email: 
+            <?php
+                $k_array = array(
+                    '@gmail.com',
+                    '@outlook.com',
+                    '@yahoo.com',
+                    'その他'
+                );
+            ?>
+            <select name="email">
+                <option value=""></option>
+            <?php
+                foreach ( $k_array as $value ) {
+                    if ( ! empty( $value ) ) {
+                        if ( $value === $datos["employee"]->email ) {
+                            echo '<option value="' . $value . '" selected>' . $value . '</option>';
+                        } else {
+                            echo '<option value="' . $value . '">' . $value . '</option>';
+                        }
+                    } else {
+                        echo '<option value="' . $value . '">' . $value . '</option>';
+                    }
+                }   
+            ?>
+            </select>
+            <!--email : checkbox-->
+            <br/ >
+ 
+            phone:
+            <?php
+            // form value
+            $v_array = array(
+                'Line',
+                'Messenger',
+                'GoogleChat',
+                'etc'
+            );
+            // set db value into an array
+            $iter = explode(',',$datos["employee"]->phone);      
+            $dbDataArr = array();
+            foreach ($iter as $key => $value){
+                $dbDataArr[] = $value;
+            };
+			for($i=0;$i<count($v_array);$i++){                             
+                echo "<input type=checkbox id=checkbox1 name=phone[]  value='".$v_array[$i]."'";
+
+                for($j=0;$j<count($dbDataArr);$j++){
+                    if($dbDataArr[$j] == $v_array[$i]){ 
+                        echo ($dbDataArr[$j] == $v_array[$i]) ? 'checked' : '' ;                      
+                    }        
+                }
+
+                echo "/>"; 
+                echo $v_array[$i];     
+            }                    
+            ?>
+            <div>
             <input type="submit" value="Send" id="send" class="btn btn-success" />
+            </div>            
             <div id="retrieve"></div>
         </form>
+        <div>
         <a href="index.php" class="btn btn-info">Return</a>
+        </div>       
     </div>
 </body>
 <script>
@@ -48,10 +110,25 @@
         function convertFormToJSON(form) {
             // Encodes the set of form elements as an array of names and values.
             var array = $(form).serializeArray();
+            // console.log(array[4]);
+             console.log(array[5]);
+            const values = array.values();
+
             var json = {};
-            $.each(array, function() {
-                json[this.name] = this.value || "";
-            });
+            var test = "";
+
+            for(var i = 0 ; i<array.length;i++){
+                if(array[i].name=='phone[]'){
+                    test+=","+array[i].value;
+                };
+                console.log(array[i].name);
+                if(array[i].name=='phone[]'){
+                    json[array[i].name] = test.substring(1); 
+                }else{
+                    json[array[i].name] = array[i].value ;  
+                }
+            };
+
             return json;
         }
 
@@ -99,7 +176,17 @@
                     //set retrieved velue to form
                     if ($(`input[name=` + key + `]`).attr('type') == 'radio') {
                         $("input[name=" + key + "][value=" + obj[key] + "]").prop('checked', true);
-                    } else {
+                    } 
+                    else if($(`select[name=` + key + `]`)){
+                        $(`select[name=` + key + `]`).val(obj[key]);
+                    }
+                    else if($(`input[name=` + key + `[]]`).attr('type') == 'checkbox'){
+                        
+                            $("input[name=" + key + "[]][value=" + obj[key] + "]").prop('checked', true);
+
+                        
+                    }
+                    else {
                         $(`input[name=` + key + `]`).val(obj[key]);
                     }
                 }

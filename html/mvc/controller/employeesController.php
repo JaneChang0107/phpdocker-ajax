@@ -61,9 +61,14 @@ class EmployeesController{
         $modelo = new Employee($this->Connection);
         //We recover the employee from the BBDD
         $employee = $modelo->getById($_GET["id"]);
+        $phone =explode(",",$employee->phone);
+        // foreach($phone as $value){
+        //     echo $value." ";
+        // };
         //We load the detail view and pass values to it
         $this->view("detalle",array(
             "employee"=>$employee,
+            "phone"=> $phone,
             "titulo" => "Detalle Employee"
         ));
     }
@@ -79,7 +84,8 @@ class EmployeesController{
             $employee->setName($_POST["Name"]);
             $employee->setSurname($_POST["Surname"]);
             $employee->setEmail($_POST["email"]);
-            $employee->setphone($_POST["phone"]);
+            $arrayToString = implode(',',$_POST['phone']);
+            $employee->setphone($arrayToString);
             $save=$employee->save();
         }
         header('Location: index.php');
@@ -97,7 +103,8 @@ class EmployeesController{
             $employee->setName($_POST["Name"]);
             $employee->setSurname($_POST["Surname"]);
             $employee->setEmail($_POST["email"]);
-            $employee->setphone($_POST["phone"]);
+            $arrayToString = implode(',',$_POST['phone']);
+            $employee->setphone($arrayToString);
             $save=$employee->update();
         }
         header('Location: index.php');
