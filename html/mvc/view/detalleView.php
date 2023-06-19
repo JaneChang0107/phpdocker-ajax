@@ -110,8 +110,6 @@
         function convertFormToJSON(form) {
             // Encodes the set of form elements as an array of names and values.
             var array = $(form).serializeArray();
-            // console.log(array[4]);
-             console.log(array[5]);
             const values = array.values();
 
             var json = {};
@@ -121,7 +119,7 @@
                 if(array[i].name=='phone[]'){
                     test+=","+array[i].value;
                 };
-                console.log(array[i].name);
+                //console.log(array[i].name);
                 if(array[i].name=='phone[]'){
                     json[array[i].name] = test.substring(1); 
                 }else{
@@ -170,8 +168,9 @@
         $("#retrieve").click(function() {
             var dataFromLocalstorage = localStorage.getItem('testObject');
             var obj = JSON.parse(dataFromLocalstorage);
-            for (const key in obj) {
-                if (obj.hasOwnProperty(key)) {
+            
+            for (const key in obj) {   
+                if (obj.hasOwnProperty(key)) {                   
                     // console.log(`${key}: ${obj[key]}`);
                     //set retrieved velue to form
                     if ($(`input[name=` + key + `]`).attr('type') == 'radio') {
@@ -181,11 +180,13 @@
                         $(`select[name=` + key + `]`).val(obj[key]);
                     }
                     else if($(`input[name=` + key + `[]]`).attr('type') == 'checkbox'){
-                        
-                            $("input[name=" + key + "[]][value=" + obj[key] + "]").prop('checked', true);
-
-                        
+                        var testobj =  obj[key]; 
+                        var arraytest =testobj.split(','); 
+                        for(var i=0; i< arraytest.length;i++){
+                            $("input[name=" + key + "[]][value=" + arraytest[i] + "]").prop('checked', true);
+                        }
                     }
+                          // $("input[name=" + key + "[]][value=" + obj[key] + "]").prop('checked', true);
                     else {
                         $(`input[name=` + key + `]`).val(obj[key]);
                     }
