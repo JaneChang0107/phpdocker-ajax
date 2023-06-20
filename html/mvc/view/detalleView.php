@@ -106,7 +106,31 @@
         var form = $("#contact-form");
         //transform form content to json object
         var before = convertFormToJSON(form);
+        var url = location.href ;
 
+        getWithExpiry(url);
+
+        function getWithExpiry(key) {
+            const expirytime = localStorage.getItem("expirytime-"+key)
+            // if the item doesn't exist, return null
+            if (!expirytime) {
+                return null;
+            }
+            const now = new Date();
+            alert(now.getTime());
+            // compare the expiry time of the item with the current time          
+            if (now.getTime() > expirytime) {
+                alert("time's up");
+                // If the item is expired, delete the item from storage and return null
+                localStorage.removeItem(key);
+                localStorage.removeItem("expirytime-"+key)
+                // clear retrieve button
+                $("#retrieve").html("");
+                return null;
+            }
+            return null;
+        }
+        
         function convertFormToJSON(form) {
             // Encodes the set of form elements as an array of names and values.
             var array = $(form).serializeArray();
@@ -134,8 +158,8 @@
         $("#contact-form").change(function() {
              //如果form物件跟LocalStorage物件 id相同才改 不同就不要改
             //set json object to local storage
-            if (localStorage.getItem('testObject') !== null) {
-                var dataFromLocalstorage = localStorage.getItem('testObject');
+            if (localStorage.getItem(url) !== null) {
+                var dataFromLocalstorage = localStorage.getItem(url);
                 var obj = JSON.parse(dataFromLocalstorage);  
                 if(obj['id']==before['id']){
                     setChangedDataToLocalStorage();
@@ -153,8 +177,8 @@
             var after = convertFormToJSON($this);
             if (before === after) {
                 return;
-            } else {
-                setWithExpiry('testObject', after, 50000);
+            } else {              
+                setWithExpiry(url, after, 5000);
             }
         };
         //create object with expiry function
@@ -165,11 +189,11 @@
             var expirytime = (now.getTime() + ttl).toString();
             var content = JSON.stringify(value);
             localStorage.setItem(key, content);
-            localStorage.setItem("expirytime", expirytime);
+            localStorage.setItem("expirytime-"+key, expirytime);
         }
 
         //if localStorage is not null then create the retrieve button
-        var dataFromLocalstorage = localStorage.getItem('testObject');
+        var dataFromLocalstorage = localStorage.getItem(url);
         var obj = JSON.parse(dataFromLocalstorage);  
 
         if (dataFromLocalstorage != null && (obj['id']===before['id'])) {
@@ -218,32 +242,10 @@
             }
         });
 
-        getWithExpiry("testObject");
 
-        function getWithExpiry(key) {
-            const expirytime = localStorage.getItem("expirytime")
-            // if the item doesn't exist, return null
-            if (!expirytime) {
-                return null;
-            }
-            const now = new Date();
-            alert(now.getTime());
-            // compare the expiry time of the item with the current time          
-            if (now.getTime() > expirytime) {
-                alert("time's up");
-                // If the item is expired, delete the item from storage and return null
-                localStorage.removeItem(key);
-                localStorage.removeItem("expirytime");
-                // clear retrieve button
-                $("#retrieve").html("");
-                return null;
-            }
-            return null;
-        }
 
         $("#send").click(function() {
-            localStorage.removeItem('testObject');
-            localStorage.removeItem('expirytime');
+            localStorage.clear();
         });
     });
 </script>
