@@ -95,41 +95,37 @@
 
    $(document).ready(function() {
 
+        //id=1
+        //"URL-url.....=1" :
+        //"expirytime-URL-url.......=1" : 123456
+        //id=2
+        //"URL-url.....=2" :
+        //"expirytime-URL-url.......=2" :
         var expirytime = "";
         var urlValue = "";
         var key1 = "";
         var key2 = "";
+        const now = new Date();
 
         checkValue();
-        ;
 
         function checkValue(){
-            for(i = 0;i<localStorage.length;i++){             
-                        if(localStorage.key(i).includes("expirytime-")){
-                            key1 = localStorage.key(i);
-                            expirytime = localStorage.getItem(localStorage.key(i));
-                        }else{
-                            key2 = localStorage.key(i);
-                            urlValue = localStorage.getItem(localStorage.key(i));
-                    }                     
-            }
-        }
-
-        clearItemInLocalStorage(key1,key2,expirytime);
-
-        function clearItemInLocalStorage(key1,key2,expirytime){
-            const now = new Date();
-            alert(now.getTime());
-            // compare the expiry time of the item with the current time          
-            if (now.getTime() > expirytime) {
-                alert("time's up");
-                // If the item is expired, delete the item from storage and return null
-                localStorage.removeItem(key1);
-                localStorage.removeItem(key2)
-                // clear retrieve button
-                return null;
-            }
-        }
+            for(i = 0;i<localStorage.length;i++){
+                if(localStorage.key(i).includes("expirytime-")){
+                    key1 = localStorage.key(i);
+                    expirytime = localStorage.getItem(key1);
+                    if (now.getTime() > expirytime){
+                        localStorage.removeItem(key1);
+                        // Find the URL-url……id=n
+                        for(i = 0;i<localStorage.length;i++){
+                            if (key1.includes(localStorage.key(i))){
+                                localStorage.removeItem(localStorage.key(i))
+                            }                                                           
+                        } 
+                    }    
+                };   
+            };
+        };
     });
     </script>
 </html>
