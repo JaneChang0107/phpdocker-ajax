@@ -132,8 +132,19 @@
 
         //detect change
         $("#contact-form").change(function() {
+             //如果form物件跟LocalStorage物件 id相同才改 不同就不要改
             //set json object to local storage
-            setChangedDataToLocalStorage();
+            if (localStorage.getItem('testObject') !== null) {
+                var dataFromLocalstorage = localStorage.getItem('testObject');
+                var obj = JSON.parse(dataFromLocalstorage);  
+                if(obj['id']==before['id']){
+                    setChangedDataToLocalStorage();
+                }else{
+                    return;
+                }
+            } else {
+                setChangedDataToLocalStorage();
+            }            
         });
 
         //set json object to local storage function
@@ -143,7 +154,7 @@
             if (before === after) {
                 return;
             } else {
-                setWithExpiry('testObject', after, 5000)
+                setWithExpiry('testObject', after, 50000);
             }
         };
         //create object with expiry function
@@ -158,19 +169,26 @@
         }
 
         //if localStorage is not null then create the retrieve button
-        if (localStorage.getItem('testObject') != null) {
+        var dataFromLocalstorage = localStorage.getItem('testObject');
+        var obj = JSON.parse(dataFromLocalstorage);  
+
+        if (dataFromLocalstorage != null && (obj['id']===before['id'])) {
+            if(obj['id']===before['id']){
+                alert("SAME");
+            }
             var html = `<input type="button" value="retrieve" class="btn btn-danger"/>`
             $("#retrieve").html(html);
         };
 
         //click retrieve button to get data at local storage
-        $("#retrieve").click(function() {
-            
+        $("#retrieve").click(function() {           
             $("#contact-form").find("textarea, :text, select").val("").end().find(":checked").prop("checked", false);
-            
-            var dataFromLocalstorage = localStorage.getItem('testObject');
-            var obj = JSON.parse(dataFromLocalstorage);
             //console.log(obj);
+            console.log(obj['id']);
+            console.log(before['id']);
+            if(obj['id']===before['id']){
+                console.log("SAME");
+            }
             for (const key in obj) {  
                 console.log(key); 
                 if (obj.hasOwnProperty(key)) {
@@ -196,10 +214,6 @@
                     }else{
                         $(`input[name=` + key + `]`).val(obj[key]);
                     };  
-                }else{
-                    concole.log("沒東西ㄌ");
-                    $("input[name=\"" + key + "\"][value='']").prop('checked', false);
-
                 }
             }
         });

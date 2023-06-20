@@ -82,10 +82,19 @@ class EmployeesController{
             //Creamos un usuario
             $employee=new Employee($this->Connection);
             $employee->setName($_POST["Name"]);
-            $employee->setSurname($_POST["Surname"]);
+            //$employee->setSurname($_POST["Surname"]);
+            if(isset($_POST['Surname'])){
+                $employee->setSurname($_POST['Surname']);
+            }else{
+                $employee->setSurname("");
+            }
             $employee->setEmail($_POST["email"]);
-            $arrayToString = implode(',',$_POST['phone']);
-            $employee->setphone($arrayToString);
+            if(isset($_POST['phone'])){
+                $arrayToString = implode(',',$_POST['phone']);
+                $employee->setphone($arrayToString);
+            }else{
+                $employee->setphone("");
+            }
             $save=$employee->save();
         }
         header('Location: index.php');
@@ -101,10 +110,19 @@ class EmployeesController{
             $employee=new Employee($this->Connection);
             $employee->setId($_POST["id"]);
             $employee->setName($_POST["Name"]);
-            $employee->setSurname($_POST["Surname"]);
+            //$employee->setSurname($_POST["Surname"]);
+            if(isset($_POST['Surname'])){
+                $employee->setSurname($_POST['Surname']);
+            }else{
+                $employee->setSurname("");
+            }           
             $employee->setEmail($_POST["email"]);
-            $arrayToString = implode(',',$_POST['phone']);
-            $employee->setphone($arrayToString);
+            if(isset($_POST['phone'])){
+                $arrayToString = implode(',',$_POST['phone']);
+                $employee->setphone($arrayToString);
+            }else{
+                $employee->setphone("");
+            }
             $save=$employee->update();
         }
         header('Location: index.php');
