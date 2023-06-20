@@ -106,30 +106,7 @@
         var form = $("#contact-form");
         //transform form content to json object
         var before = convertFormToJSON(form);
-        var url = location.href ;
-
-        getWithExpiry(url);
-
-        function getWithExpiry(key) {
-            const expirytime = localStorage.getItem("expirytime-"+key)
-            // if the item doesn't exist, return null
-            if (!expirytime) {
-                return null;
-            }
-            const now = new Date();
-            alert(now.getTime());
-            // compare the expiry time of the item with the current time          
-            if (now.getTime() > expirytime) {
-                alert("time's up");
-                // If the item is expired, delete the item from storage and return null
-                localStorage.removeItem(key);
-                localStorage.removeItem("expirytime-"+key)
-                // clear retrieve button
-                $("#retrieve").html("");
-                return null;
-            }
-            return null;
-        }
+        var url = "URL-"+location.href ;
         
         function convertFormToJSON(form) {
             // Encodes the set of form elements as an array of names and values.
@@ -242,7 +219,28 @@
             }
         });
 
+        getWithExpiry(url);
 
+        function getWithExpiry(key) {
+            const expirytime = localStorage.getItem("expirytime-"+key)
+            // if the item doesn't exist, return null
+            if (!expirytime) {
+                return null;
+            }
+            const now = new Date();
+            alert(now.getTime());
+            // compare the expiry time of the item with the current time          
+            if (now.getTime() > expirytime) {
+                alert("time's up");
+                // If the item is expired, delete the item from storage and return null
+                localStorage.removeItem(key);
+                localStorage.removeItem("expirytime-"+key)
+                // clear retrieve button
+                $("#retrieve").html("");
+                return null;
+            }
+            return null;
+        }
 
         $("#send").click(function() {
             localStorage.clear();
