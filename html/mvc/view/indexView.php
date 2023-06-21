@@ -98,6 +98,7 @@
         //id=1
         //"URL-url.....=1" :
         //"expirytime-URL-url.......=1" : 123456
+        
         //id=2
         //"URL-url.....=2" :
         //"expirytime-URL-url.......=2" :
@@ -107,7 +108,9 @@
         var key2 = "";
         const now = new Date();
 
-        checkValue();
+        if(localStorage.length!=0){
+            checkValue();
+        };
 
         function checkValue(){
             for(i = 0;i<localStorage.length;i++){
@@ -117,13 +120,18 @@
                     if (now.getTime() > expirytime){
                         localStorage.removeItem(key1);
                         // Find the URL-url……id=n
-                        for(i = 0;i<localStorage.length;i++){
-                            if (key1.includes(localStorage.key(i))){
-                                localStorage.removeItem(localStorage.key(i))
+                        for(j = 0;j<localStorage.length;j++){
+                            if (key1.includes(localStorage.key(j))){
+                                localStorage.removeItem(localStorage.key(j));
+                                i=0;
                             }                                                           
                         } 
                     }    
-                };   
+                }else{
+                    continue;
+                }
+
+            //console.log(i+"=after="+localStorage.key(i));   
             };
         };
     });
