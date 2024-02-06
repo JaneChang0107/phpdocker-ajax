@@ -12,7 +12,7 @@ error_reporting( E_ALL );
 
 // データベースへの接続を確立する
 
-$dsn = 'mysql:dbname=test;host=172.20.0.1';
+$dsn = 'mysql:dbname=test;host=172.20.0.2';
 $user = 'test';
 $password = 'test';
 $db = new PDO($dsn,$user,$password);
